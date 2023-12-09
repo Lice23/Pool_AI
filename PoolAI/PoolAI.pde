@@ -12,15 +12,20 @@ import org.jbox2d.dynamics.contacts.*;
 
 Population pop;//the population of pool players
 Box2DProcessing[] box2d;//each player needs an individual world so this array stores them
-int popSize = 200;//the amount of players tested at once
+int popSize = 1000;//the amount of players tested at once
 table[] tables;//each player also needs a table
-int speed = 60;//frameRate
-
+int speed = 240;//frameRate
+int consolidation = 3;
+long start;
+long end;
+PrintWriter output;
 
 boolean showSingle = false;//whether only one player needs to be shown because they are all the same
 boolean saveFrames = true;//true if it the first gen after increasing the number of shots so it saves the full game not just the last shot
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup() {
+  output = createWriter("executions.txt");
+  start = System.currentTimeMillis();
   size(400, 800);
   frameRate(speed);//set the initial frame rate
 
@@ -45,7 +50,14 @@ void draw() {
   tables[0].show();//show the cushions and holes
 
   if (pop.foundWinner) {//if one of the population has sunk all the balls then replay it and record it
-
+    end = System.currentTimeMillis();
+    output.println("Population size: " + popSize);
+    output.println("Consolidation size: " + consolidation);
+    output.println("Time elapsed: " + ((float) ((end - start)/1000)));
+    output.println("Generation: " + pop.generation);
+    output.println("\n");
+    output.flush();
+    output.close();
     if ((!pop.players[pop.bestPlayerNo].gameOver && !pop.players[pop.bestPlayerNo].won )|| !pop.players[pop.bestPlayerNo].ballsStopped()) {//while not done replaying
       box2d[pop.bestPlayerNo].step(); //step the world through time
       pop.players[pop.bestPlayerNo].update();//update the player
@@ -63,13 +75,13 @@ void draw() {
       pop.setBestPlayer();//sets best player and checks if it won
       if (!pop.foundWinner) {//if the best player didnt win
 
-        if (pop.generation % 5 == 0) {//every 5 generation
+        if (pop.generation % consolidation == 0) {//every 5 generation
           pop.resetPopulation();//set all the population as the best player then add one shot to the end of them
           showSingle = true;//only show one of the players
           saveFrames = true;//save all of the next game to show which shot was added to the end
         } else {
           pop.naturalSelection();//create new generation based on fitness 
-          showSingle = true;//only show one of the players
+          //showSingle = true;//only show one of the players
         }
       }
     }

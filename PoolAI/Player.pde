@@ -121,7 +121,7 @@ class Player {
     if ( totalDistance==0) { //if all balls sunk
       fitness = 1000;
     } else {
-      fitness = ((1 +(ballsSunk - ballsSunkPreviously))*(1+(ballsSunk - ballsSunkPreviously)))/(totalDistance);//fitness function
+      fitness = ((1 +(ballsSunk - ballsSunkPreviously))*(1 + (ballsSunk - ballsSunkPreviously)))/(totalDistance);//fitness function
     }
   }
 

@@ -34,7 +34,7 @@ class Population {
       }
     } 
     if (!showSingle) {//if showing the whole population
-      for (int i =0; i< players.length; i++) {//do it
+      /*for (int i =0; i< players.length; i++) {//do it
 
         players[i].show();
       }
@@ -42,7 +42,7 @@ class Population {
     } else { //if showSIngle is still true and its the first time showing the full shots then save it
       if (saveFrames) {
         saveFrame("output/15Ball/qualitySolution/frame_#######.png");//save the frame as an image
-      }
+      }*/
     }
   }
   //------------------------------------------------------------------------------------------------------------------------------------------------------------------
